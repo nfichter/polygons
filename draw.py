@@ -171,16 +171,36 @@ def add_torus( edges, cx, cy, cz, r0, r1, step ):
 	longt_start = 0
 	longt_stop = num_steps
 	
+	p = len(points)
+	
 	for lat in range(lat_start, lat_stop):
 		for longt in range(longt_start, longt_stop):
 			index = lat * num_steps + longt
 			
-			add_edge(edges, points[index][0],
-					 points[index][1],
-					 points[index][2],
-					 points[index][0]+1,
-					 points[index][1]+1,
-					 points[index][2]+1 )
+			x0 = points[index][0]
+			y0 = points[index][1]
+			z0 = points[index][2]
+			
+			x1 = points[(index + num_steps) % p][0]
+			y1 = points[(index + num_steps) % p][1]
+			z1 = points[(index + num_steps) % p][2]
+			
+			x2 = points[(index + 1) % p][0]
+			y2 = points[(index + 1) % p][1]
+			z2 = points[(index + 1) % p][2]
+			
+			x3 = points[(index + num_steps + 1) % p][0]
+			y3 = points[(index + num_steps + 1) % p][1]
+			z3 = points[(index + num_steps + 1) % p][2]
+			
+			add_polygon(edges,
+						x0,y0,z0,
+						x2,y2,z2,
+						x1,y1,z1)
+			add_polygon(edges,
+						x2,y2,z2,
+						x3,y3,z3,
+						x1,y1,z1)
 
 def generate_torus( cx, cy, cz, r0, r1, step ):
 	points = []
@@ -190,8 +210,6 @@ def generate_torus( cx, cy, cz, r0, r1, step ):
 	rot_stop = num_steps
 	circ_start = 0
 	circ_stop = num_steps
-
-	print num_steps
 	
 	for rotation in range(rot_start, rot_stop):
 		rot = step * rotation
