@@ -15,21 +15,25 @@ def draw_polygons( points, screen, color ):
 		
 	point = 0
 	while point < len(points) - 1:
-		draw_line( int(points[point][0]),
-				   int(points[point][1]),
-				   int(points[point+1][0]),
-				   int(points[point+1][1]),
-				   screen, color)
-		draw_line( int(points[point+1][0]),
-				   int(points[point+1][1]),
-				   int(points[point+2][0]),
-				   int(points[point+2][1]),
-				   screen, color)
-		draw_line( int(points[point][0]),
-				   int(points[point][1]),
-				   int(points[point+2][0]),
-				   int(points[point+2][1]),
-				   screen, color)
+		
+		nz = (points[point+1][0]-points[point][0])*(points[point+2][1]-points[point][1]) - (points[point+1][1]-points[point][1])*(points[point+2][0]-points[point][0])
+		
+		if nz > 0:
+			draw_line( int(points[point][0]),
+					   int(points[point][1]),
+					   int(points[point+1][0]),
+					   int(points[point+1][1]),
+					   screen, color)
+			draw_line( int(points[point+1][0]),
+					   int(points[point+1][1]),
+					   int(points[point+2][0]),
+					   int(points[point+2][1]),
+					   screen, color)
+			draw_line( int(points[point][0]),
+					   int(points[point][1]),
+					   int(points[point+2][0]),
+					   int(points[point+2][1]),
+					   screen, color)
 		point+= 3
 
 
@@ -85,8 +89,8 @@ def add_box( points, x0, y0, z0, width, height, depth ):
 				x0, y1, z1)
 	add_polygon(points,
 				x0, y0, z0,
-				x0, y0, z1,
-				x0, y1, z1)
+				x0, y1, z1,
+				x0, y1, z0)
 	
 	#right
 	add_polygon(points,
@@ -111,7 +115,7 @@ def add_sphere( edges, cx, cy, cz, r, step ):
 	
 	num_steps+= 1
 	for lat in range(lat_start, lat_stop):
-		for longt in range(longt_start, longt_stop+1):
+		for longt in range(longt_start, longt_stop):
 			index = lat * num_steps + longt
 			
 			x0 = points[index][0]
